@@ -8,12 +8,29 @@ services:
     ports:
       - 5050:80
     container_name: web
+    networks:
+      backend:
+        aliases:
+          - web
   db:
+    build:
+      context: './docker/db'
+    env_file:
+      - .env
     image: mysql:5.7
-    container_name: mysql-db
+    container_name: db
     ports:
-      - 3306:3307
+      - 3306:3306
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=Root123!
-      - MYSQL_DATABASE=takeaway
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    networks:
+      backend:
+        aliases:
+          - db
+networks:
+  backend:
+    name: backend-network

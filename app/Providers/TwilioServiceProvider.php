@@ -10,7 +10,11 @@ class TwilioServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(Twilio::class, function (){
-            return new Twilio(config('sms.twilio.host'), config('sms.twilio.sid'), config('sms.twilio.token'), config('sms.twilio.from'));
+            $host = config('sms.twilio.host');
+            $sid = config('sms.twilio.sid');
+            $token = config('sms.twilio.token');
+            $from = config('sms.twilio.from');
+            return new Twilio($host, $sid, $token, $from);
         });
     }
 }

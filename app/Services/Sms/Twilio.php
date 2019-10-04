@@ -2,8 +2,8 @@
 
 
 namespace App\Services\Sms;
+use App\Smslog;
 use Twilio\Exceptions\TwilioException;
-use Twilio\Http\GuzzleClient;
 use Twilio\Rest\Client;
 
 class Twilio
@@ -30,13 +30,15 @@ class Twilio
 
     public function sendMessage()
     {
+        $this->host .= '/Accounts/'.$this->sid.'/Messages';
         try {
-            $client = new Client($this->sid, $this->token, null, null, new GuzzleClient());
+            $client = new Client($this->sid, $this->token);
             $message = $client->messages->create($this->to, ['from' => $this->from, 'body' => $this->body]);
-            dd($message->sid);
+            $this->logMessage($message->status);
+            return true;
         }
         catch (TwilioException $e){
-            dd($e->getMessage(), $e->getCode());
+            return false;
         }
     }
 
@@ -44,5 +46,10 @@ class Twilio
     {
         $this->to = $params['to'];
         $this->body = $params['body'];
+    }
+
+    public function logMessage($status)
+    {
+        Smslog::create(['to' => $this->to, 'from' => $this->from, 'body' => $this->body, 'status' => $status]);
     }
 }
