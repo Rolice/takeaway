@@ -10,19 +10,26 @@ class Controller extends BaseController
 {
     public function index()
     {
-        $this->send();
+        $this->send('+359897981948', 'ibre');
         $smsLog = Smslog::all();
-        dd($smsLog->toArray());
+        return $smsLog->toArray();
     }
 
-    public function send()
+    public function send($to, $body)
     {
         $twilio = app(Twilio::class);
         $params = [
-            'to' => "+359897981948",
-            'body' => "test"
+            'to' => $to,
+            'body' => $body
         ];
         $twilio->setMessageParams($params);
-        $twilio->sendMessage();
+        $message = $twilio->sendMessage();
+        if(isset($message['error'])) {
+            return json_encode($message);
+        }
+        else{
+            Smslog::create($message);
+            return json_encode($message);
+        }
     }
 }

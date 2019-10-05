@@ -34,11 +34,16 @@ class Twilio
         try {
             $client = new Client($this->sid, $this->token);
             $message = $client->messages->create($this->to, ['from' => $this->from, 'body' => $this->body]);
-            $this->logMessage($message->status);
-            return true;
+            $return = [
+                'from' => $message->from,
+                'to' => $message->to,
+                'body' => $message->body,
+                'status' => $message->status
+            ];
+            return $return;
         }
         catch (TwilioException $e){
-            return false;
+            return ['error' => $e->getMessage()];
         }
     }
 
@@ -46,10 +51,5 @@ class Twilio
     {
         $this->to = $params['to'];
         $this->body = $params['body'];
-    }
-
-    public function logMessage($status)
-    {
-        Smslog::create(['to' => $this->to, 'from' => $this->from, 'body' => $this->body, 'status' => $status]);
     }
 }

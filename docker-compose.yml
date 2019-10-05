@@ -1,5 +1,26 @@
 version: '3.7'
 services:
+  db:
+    build:
+      context: './docker/db'
+    env_file:
+      - .env
+    image: mysql:5.7
+    container_name: db
+    ports:
+      - 3306:3306
+    restart: always
+    volumes:
+      - ./docker/db/data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    networks:
+      backend:
+        aliases:
+          - db
   web:
     build:
       context: './docker/web'
@@ -12,25 +33,6 @@ services:
       backend:
         aliases:
           - web
-  db:
-    build:
-      context: './docker/db'
-    env_file:
-      - .env
-    image: mysql:5.7
-    container_name: db
-    ports:
-      - 3306:3306
-    restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${DB_DATABASE}
-      - MYSQL_USER=${DB_USERNAME}
-      - MYSQL_PASSWORD=${DB_PASSWORD}
-    networks:
-      backend:
-        aliases:
-          - db
 networks:
   backend:
     name: backend-network
