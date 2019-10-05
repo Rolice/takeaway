@@ -4,23 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Services\Sms\Twilio;
 use App\Smslog;
+use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class Controller extends BaseController
 {
     public function index()
     {
-        $this->send('+359897981948', 'ibre');
         $smsLog = Smslog::all();
-        return $smsLog->toArray();
+        return view('index', ['smsLog' => $smsLog->toArray()]);
     }
 
-    public function send($to, $body)
+    public function send(Request $request)
     {
         $twilio = app(Twilio::class);
         $params = [
-            'to' => $to,
-            'body' => $body
+            'to' => $request->to,
+            'body' => $request->body
         ];
         $twilio->setMessageParams($params);
         $message = $twilio->sendMessage();

@@ -12,3 +12,4 @@
 */
 
 $router->get('/', 'Controller@index');
+$router->post('/send', 'Controller@send');
