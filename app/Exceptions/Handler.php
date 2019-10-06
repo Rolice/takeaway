@@ -46,7 +46,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if($exception instanceof TwilioException){
+        if($exception instanceof Exception){
             if(strpos($exception->getMessage(), '[HTTP')!==false){
                 $code = intval(substr($exception->getMessage(), 6, 3));
             }
