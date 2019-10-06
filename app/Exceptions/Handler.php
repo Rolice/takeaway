@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Twilio\Exceptions\TwilioException;
 
 class Handler extends ExceptionHandler
 {
@@ -45,6 +46,15 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if($exception instanceof TwilioException){
+            if(strpos($exception->getMessage(), '[HTTP')!==false){
+                $code = intval(substr($exception->getMessage(), 6, 3));
+            }
+            else{
+                $code = 500;
+            }
+            return response(view('errors.default', ['exception' => $exception]), $code);
+        }
         return parent::render($request, $exception);
     }
 }

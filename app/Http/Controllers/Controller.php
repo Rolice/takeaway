@@ -15,21 +15,29 @@ class Controller extends BaseController
         return view('index', ['smsLog' => $smsLog->toArray()]);
     }
 
-    public function send(Request $request)
+    public function notify(Request $request, $type)
     {
+        $body = config('sms.notifications.'.$type);
+        if($body == null){
+            $message['error'] = 'No such message template.';
+            return json_encode($message);
+        }
+
+        $body = sprintf($body, $request->restaurant, $request->time);
         $twilio = app(Twilio::class);
         $params = [
             'to' => $request->to,
-            'body' => $request->body
+            'body' => $body
         ];
         $twilio->setMessageParams($params);
         $message = $twilio->sendMessage();
-        if(isset($message['error'])) {
-            return json_encode($message);
-        }
-        else{
-            Smslog::create($message);
-            return json_encode($message);
-        }
+
+        Smslog::create($message);
+        return json_encode($message);
+    }
+
+    public function status(Request $request)
+    {
+
     }
 }

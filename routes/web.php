@@ -12,4 +12,5 @@
 */
 
 $router->get('/', 'Controller@index');
-$router->post('/send', 'Controller@send');
+$router->post('/notify/{type}', 'Controller@notify');
+$router->post('/status', 'Controller@status');

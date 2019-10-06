@@ -3,6 +3,7 @@
 
 namespace App\Services\Sms;
 use App\Smslog;
+use Twilio\Exceptions\HttpException;
 use Twilio\Exceptions\TwilioException;
 use Twilio\Rest\Client;
 
@@ -31,20 +32,21 @@ class Twilio
     public function sendMessage()
     {
         $this->host .= '/Accounts/'.$this->sid.'/Messages';
-        try {
-            $client = new Client($this->sid, $this->token);
-            $message = $client->messages->create($this->to, ['from' => $this->from, 'body' => $this->body]);
-            $return = [
-                'from' => $message->from,
-                'to' => $message->to,
-                'body' => $message->body,
-                'status' => $message->status
-            ];
-            return $return;
-        }
-        catch (TwilioException $e){
-            return ['error' => $e->getMessage()];
-        }
+
+        $client = new Client($this->sid, $this->token);
+        $params = [
+            'from' => $this->from,
+            'body' => $this->body,
+            'statusCallback' => config('sms.twilio.callBack').'/',
+        ];
+        $message = $client->messages->create($this->to, $params);
+        $return = [
+            'from' => $message->from,
+            'to' => $message->to,
+            'body' => $message->body,
+            'status' => $message->status
+        ];
+        return $return;
     }
 
     public function setMessageParams($params)
