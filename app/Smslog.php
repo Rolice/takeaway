@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Smslog extends Model
 {
-    protected $fillable = ['to', 'from', 'body', 'status'];
+    protected $fillable = ['to', 'from', 'body', 'status', 'sid'];
 
     public $to;
 
@@ -15,5 +15,7 @@ class Smslog extends Model
     public $body;
 
     public $status;
+
+    public $sid = null;
 
 }

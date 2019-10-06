@@ -37,14 +37,15 @@ class Twilio
         $params = [
             'from' => $this->from,
             'body' => $this->body,
-            'statusCallback' => config('sms.twilio.callBack').'/',
+            'statusCallback' => config('sms.twilio.callBack').'status',
         ];
         $message = $client->messages->create($this->to, $params);
         $return = [
             'from' => $message->from,
             'to' => $message->to,
             'body' => $message->body,
-            'status' => $message->status
+            'status' => $message->status,
+            'sid' => $message->sid
         ];
         return $return;
     }

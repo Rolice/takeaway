@@ -14,7 +14,7 @@ class SmslogSid extends Migration
     public function up()
     {
         Schema::table('smslogs', function (Blueprint $table){
-            $table->string('sid');
+            $table->string('sid')->nullable(true);
         });
     }
 
@@ -25,6 +25,8 @@ class SmslogSid extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('smslogs', function (Blueprint $table){
+            $table->dropColumn('sid');
+        });
     }
 }

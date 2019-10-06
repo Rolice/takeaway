@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Services\Sms\Twilio;
 use App\Smslog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class Controller extends BaseController
 {
     public function index()
     {
-        $smsLog = Smslog::all();
+        $smsLog = Smslog::take(50)->orderByRaw("FIELD(status, 'undelivered', 'sent', 'failed', 'queued', 'delivered')")->get();
         return view('index', ['smsLog' => $smsLog->toArray()]);
     }
 
@@ -38,6 +39,10 @@ class Controller extends BaseController
 
     public function status(Request $request)
     {
-
+        if($request->MessageSid)
+        {
+            $message = Smslog::where('sid', $request->MessageSid);
+            $message->update(['status' => $request->MessageStatus]);
+        }
     }
 }

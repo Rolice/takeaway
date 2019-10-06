@@ -30,6 +30,6 @@ class CreateSmslogTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('smslog');
+        Schema::dropIfExists('smslogs');
     }
 }
