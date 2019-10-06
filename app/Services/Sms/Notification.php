@@ -32,6 +32,5 @@ class Notification
 
         Smslog::create($message);
         return json_encode($message);
-
     }
 }
