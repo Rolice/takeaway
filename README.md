@@ -30,3 +30,7 @@ The parameters needed for the notification are minimal - restaurant name, hour o
 The templates are currently stored in the config file, but would be better off in a db table when the service grows so they can be managed by non-programmers as well.
 
 Twilio provides their own php SDK which I used. Not sure if you wanted to see me making an http call.
+
+### Tests
+I've added some tests which check if the homepage gets http 200, if the sms is sent and the record is inserted in the logs db.
+To run them execute `vendor/bin/phpunit` from the docker console `docker exec -it web /bin/bash`
