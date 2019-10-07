@@ -9,18 +9,49 @@ use Twilio\Rest\Client;
 
 class Twilio
 {
+    /**
+     * The number to send the message to
+     * @var string
+     */
     public $to;
 
+    /**
+     * The body of the message
+     * @var string
+     */
     public $body;
 
+    /**
+     * The number which sends the message
+     * @var string
+     */
     private $from;
 
+    /**
+     * Twilio hostname
+     * @var string
+     */
     private $host;
 
+    /**
+     * Twilio SID
+     * @var string
+     */
     private $sid;
 
+    /**
+     * Twilio auth token
+     * @var string
+     */
     private $token;
 
+    /**
+     * Twilio constructor. Populates the object from config.
+     * @param $host
+     * @param $sid
+     * @param $token
+     * @param $from
+     */
     public function __construct($host, $sid, $token, $from)
     {
         $this->host = $host;
@@ -29,6 +60,12 @@ class Twilio
         $this->from = $from;
     }
 
+    /**
+     * sends the actual message
+     * @return array
+     * @throws TwilioException
+     * @throws \Twilio\Exceptions\ConfigurationException
+     */
     public function sendMessage()
     {
         $this->host .= '/Accounts/'.$this->sid.'/Messages';
@@ -50,6 +87,10 @@ class Twilio
         return $return;
     }
 
+    /**
+     * Populates the message params - to and body.
+     * @param $params
+     */
     public function setMessageParams($params)
     {
         $this->to = $params['to'];

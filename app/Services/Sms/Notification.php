@@ -8,7 +8,16 @@ use App\Smslog;
 
 class Notification
 {
-    public function notify($type, $restaurant, $time = null, $to)
+    /**
+     * A method to send a notification. Populates the message template then calls the appropriate service.
+     * @param $type
+     * @param $restaurant
+     * @param $to
+     * @param null $time
+     * @return false|string
+     * @throws \Exception
+     */
+    public function notify($type, $restaurant, $to, $time = null)
     {
         $body = config('sms.notifications.'.$type);
         if($body == null){
