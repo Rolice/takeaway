@@ -1,10 +1,6 @@
 FROM php:7.3-apache
-RUN apt-get update -yqq && \
-a2enmod rewrite && \
-docker-php-ext-install pdo_mysql zip
-RUN apt-get install -y zip \
-unzip \
-git
+RUN apt-get update -yqq && a2enmod rewrite && docker-php-ext-install pdo_mysql
+RUN apt-get install -yqq zip unzip git
 
 RUN php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
 
