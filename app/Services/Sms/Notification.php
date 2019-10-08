@@ -28,7 +28,7 @@ class Notification
             $body = sprintf($body, $restaurant, $time);
         }
         else{
-            $body = sprintf($body, urlencode($restaurant));
+            $body = sprintf($body, urlencode($restaurant), $time);
         }
         $notificationService = 'App\Services\Sms\\'.config('sms.notification_service');
         $twilio = app($notificationService);

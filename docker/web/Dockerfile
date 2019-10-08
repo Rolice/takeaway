@@ -5,6 +5,7 @@ RUN apt-get install -yqq zip unzip git
 RUN php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
 
 COPY default.conf /etc/apache2/sites-enabled/000-default.conf
+COPY php.ini /usr/local/etc/php/
 
 WORKDIR /var/www/takeaway
 

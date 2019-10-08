@@ -40,17 +40,17 @@ services:
       backend:
         aliases:
           - web
-  lt:
-    build:
-      context: './docker/localtunnel'
-    command: "usr/local/bin/lt --port 80 --subdomain ivailotakeaway --local-host web"
-    depends_on:
-      - web
-    restart: always
-    networks:
-      backend:
-        aliases:
-          - lt
+#  lt:
+#    build:
+#      context: './docker/localtunnel'
+#    command: "usr/local/bin/lt --port 80 --subdomain ivailotakeaway --local-host web"
+#    depends_on:
+#      - web
+#    restart: always
+#    networks:
+#      backend:
+#        aliases:
+#          - lt
 networks:
   backend:
     name: backend-network
